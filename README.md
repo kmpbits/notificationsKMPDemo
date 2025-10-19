@@ -1,35 +1,119 @@
-This is a Kotlin Multiplatform project targeting Android, iOS.
+# 🔔 KMP Notifications Demo
 
-* [/composeApp](./composeApp/src) is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - [commonMain](./composeApp/src/commonMain/kotlin) is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    the [iosMain](./composeApp/src/iosMain/kotlin) folder would be the right place for such calls.
-    Similarly, if you want to edit the Desktop (JVM) specific part, the [jvmMain](./composeApp/src/jvmMain/kotlin)
-    folder is the appropriate location.
+A Kotlin Multiplatform demo showing how to request notification permissions and trigger **native local notifications** on both **Android** and **iOS** — with all the logic written in **Kotlin**.
 
-* [/iosApp](./iosApp/iosApp) contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform,
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
-
-### Build and Run Android Application
-
-To build and run the development version of the Android app, use the run configuration from the run widget
-in your IDE’s toolbar or build it directly from the terminal:
-- on macOS/Linux
-  ```shell
-  ./gradlew :composeApp:assembleDebug
-  ```
-- on Windows
-  ```shell
-  .\gradlew.bat :composeApp:assembleDebug
-  ```
-
-### Build and Run iOS Application
-
-To build and run the development version of the iOS app, use the run configuration from the run widget
-in your IDE’s toolbar or open the [/iosApp](./iosApp) directory in Xcode and run it from there.
+This demo proves that KMP isn’t just for sharing ViewModels, you can even handle **notifications natively** using `expect/actual`.
 
 ---
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+## 🚀 Features
+
+- ✅ Single Kotlin API for notifications
+- 📱 Works on Android and iOS
+- 🧩 Uses `expect/actual` to access native notification frameworks
+- 🍏 Minimal Swift code — only an `AppDelegate` for iOS setup
+- ⚡ Fully functional local notifications demo
+
+---
+
+## 🧠 How it works
+
+The shared module defines an **expected** class:
+
+```kotlin
+expect class NotificationService {
+
+  fun showNotification(
+    title: String,
+    message: String?
+  )
+
+  fun requestPermission(
+    activity: PlatformActivity,
+    onFinished: (Boolean) -> Unit
+  )
+
+  suspend fun areNotificationsEnabled(): Boolean
+}
+```
+
+Each platform provides its **actual** implementation.
+
+### Android
+- Uses `NotificationCompat` to create and display notifications
+- Handles Android 13+ permission requests
+- Creates a simple notification channel
+
+### iOS
+- Uses `UNUserNotificationCenter` and `UIApplication` directly from Kotlin
+- Requests permission and sends notifications through iOS APIs
+- Only requires a tiny bit of Swift in `AppDelegate` for delegate registration
+
+---
+
+## 🧪 Demo UI
+
+A minimal interface with two buttons:
+- **Request Permission** → calls `askForNotificationPermission`
+- **Show Notification** → triggers `showNotification()`
+- -**ViewModel** to call the service and observe if notifications are enabled
+
+You can build it using:
+- **Compose Multiplatform** for a unified UI  
+  or
+- Native **SwiftUI / Android XML** — both work perfectly with this shared logic
+
+---
+
+## 🛠️ Requirements
+
+- **Android Studio Ladybug+** or later
+- **Xcode 15+**
+- **Kotlin 2.0+**
+- **Compose Multiplatform (optional)** if you’re using shared UI
+
+---
+
+## ▶️ Running the demo
+
+### Android
+Just hit **Run** from Android Studio and tap the buttons.
+
+### iOS
+Open the iOS app in Xcode once (to register the `AppDelegate`), then run:
+```bash
+./gradlew iosDeployIPhoneSimulator
+```
+or run it directly from Xcode.
+
+Make sure to **allow notifications** when prompted.
+
+---
+
+## 💬 Example output
+
+When you press **Show Notification**, you’ll see:
+> “Hello, ${getPlatform().name}!”
+> “This is a notification message.”
+
+appearing natively on both platforms.
+
+---
+
+## 🧩 Why this matters
+
+This project demonstrates how Kotlin Multiplatform lets you:
+- Access **native platform APIs** directly from Kotlin
+- Replace boilerplate Swift/Kotlin with a single shared implementation
+- Keep full control while sharing real functionality
+
+KMP is not just about shared logic — it’s about shared power ⚡
+
+---
+
+## 🏁 Credits
+
+Built with ❤️ by **KMP Bits**  
+Follow more Kotlin Multiplatform content on:
+- **[KMP Bits](https://kmpbits.com)**  
+- **[Medium](https://medium.com/@kmpbits)**  
