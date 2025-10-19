@@ -1,0 +1,3 @@
+package com.kmpbits.notificationskmpdemo.platform
+
+actual class PlatformActivity
