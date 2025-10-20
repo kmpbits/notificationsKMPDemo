@@ -9,10 +9,7 @@ expect class NotificationService {
         message: String?
     )
 
-    fun requestPermission(
-        activity: PlatformActivity,
-        onFinished: (Boolean) -> Unit
-    )
+    fun requestPermission(activity: PlatformActivity)
 
     suspend fun areNotificationsEnabled(): Boolean
 }

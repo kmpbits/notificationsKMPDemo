@@ -41,8 +41,7 @@ actual class NotificationService(
     }
 
     actual fun requestPermission(
-        activity: PlatformActivity,
-        onFinished: (Boolean) -> Unit
+        activity: PlatformActivity
     ) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(activity.activity.applicationContext, Manifest.permission.POST_NOTIFICATIONS) ==
@@ -53,11 +52,7 @@ actual class NotificationService(
                     arrayOf(Manifest.permission.POST_NOTIFICATIONS),
                     REQUEST_CODE_NOTIFICATIONS
                 )
-            } else {
-                onFinished(true)
             }
-        } else {
-            onFinished(true)
         }
     }
 
@@ -74,6 +69,7 @@ actual class NotificationService(
     }
 
     companion object {
+        // This is needed to check the result on MainActivity
         const val REQUEST_CODE_NOTIFICATIONS: Int = 1
     }
 

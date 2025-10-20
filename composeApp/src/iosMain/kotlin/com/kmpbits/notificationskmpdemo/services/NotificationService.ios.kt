@@ -1,5 +1,7 @@
 package com.kmpbits.notificationskmpdemo.services
 
+import com.kmpbits.notificationskmpdemo.events.NotificationPermissionType
+import com.kmpbits.notificationskmpdemo.events.NotificationStateEvent
 import com.kmpbits.notificationskmpdemo.platform.PlatformActivity
 import kotlinx.coroutines.suspendCancellableCoroutine
 import platform.Foundation.NSUUID
@@ -43,8 +45,7 @@ actual class NotificationService {
     }
 
     actual fun requestPermission(
-        activity: PlatformActivity,
-        onFinished: (Boolean) -> Unit
+        activity: PlatformActivity
     ) {
         val center = UNUserNotificationCenter.currentNotificationCenter()
         center.requestAuthorizationWithOptions(
@@ -52,9 +53,9 @@ actual class NotificationService {
             completionHandler = { granted, error ->
                 if (error == null) {
                     UIApplication.sharedApplication.registerForRemoteNotifications()
-                    onFinished(granted)
+                    NotificationStateEvent.send(NotificationPermissionType.GRANTED)
                 } else {
-                    onFinished(false)
+                    NotificationStateEvent.send(NotificationPermissionType.DENIED)
                 }
             }
         )
