@@ -20,10 +20,12 @@ class AppViewModel(
     val notificationEnabledState = _notificationEnabledState.asStateFlow()
 
     init {
+        // The first time the user opens the app, check if there is a notification permission
         viewModelScope.launch {
             _notificationEnabledState.value = notificationService.areNotificationsEnabled()
         }
 
+        // When the user clicks on the permission dialog, the notification permission is granted/denied
         viewModelScope.launch {
             NotificationStateEvent.observe().collectLatest {
                 _notificationEnabledState.value = it == NotificationPermissionType.GRANTED

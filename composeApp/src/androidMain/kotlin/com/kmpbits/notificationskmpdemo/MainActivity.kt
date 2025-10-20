@@ -3,6 +3,7 @@ package com.kmpbits.notificationskmpdemo
 import android.app.Application
 import android.app.ComponentCaller
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -51,7 +52,7 @@ class MainActivity : ComponentActivity() {
 
         if (requestCode == NotificationService.REQUEST_CODE_NOTIFICATIONS) {
             NotificationStateEvent.send(
-                if (grantResults.isNotEmpty() && grantResults[0] == 0)
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
                     NotificationPermissionType.GRANTED
                 else
                     NotificationPermissionType.DENIED
